@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Lucid, UTxO } from 'lucid-cardano'
+import { Lucid } from 'lucid-cardano'
 import { WalletConnectedView } from './views/WalletConnectedView';
 import { setProtocolParameters } from './util/setProtocolParameters';
 import "./App.css"

@@ -1,4 +1,4 @@
-import { C, Data, Lucid, UTxO, fromText, toUnit } from "lucid-cardano"
+import {  Data, Lucid, UTxO, fromText, toUnit } from "lucid-cardano"
 import { useEffect, useState } from "react"
 import { WalletOption } from "../App"
 import { BwpExchangeMint } from "../contracts/types"
