@@ -62,6 +62,9 @@ function App() {
           lucid.selectWallet(enabledWalletAPI)
         }
       }
+
+      document.body.style.backgroundImage = 'url("./bwpmeme3.png")'
+
     } catch (error) {
       setWalletError("Failed to connect to requested wallet. Refresh and try again.")
       console.error(`Error connecting to ${walletName}`, error);
@@ -100,8 +103,8 @@ function App() {
   const isWalletConnected = connectedWallet && connectedWallet.name
 
   return (
-    <div className='app-container'>
-      <div className='title-heading'>bushwifplanes</div>
+    <div className={isWalletConnected ? 'app-container-logged-in' : 'app-container'}>
+      <div className='title-heading fire burn'>bushwifplanes</div>
 
       <div>
         { walletError ? errorConnectingWalletView : <span></span>}

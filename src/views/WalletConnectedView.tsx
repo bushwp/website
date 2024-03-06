@@ -17,7 +17,7 @@ const tierCosts = [2n, 3n, 4n]
 const RFTMintingPolicy = new BwpExchangeMint(BWP_POLICY, BWP_ASSET_NAME, admins, tierCosts)
 
 export function WalletConnectedView(props: WalletConnectedViewProps) {
-    const { lucid, connectedWallet } = props
+    const { lucid } = props
     const [bwp, setBwp] = useState<bigint>(0n)
     const [isBwpLoading, setIsBwpLoading] = useState<boolean>(false)
     const [pkh, setPkh] = useState<string>("")
@@ -89,43 +89,50 @@ export function WalletConnectedView(props: WalletConnectedViewProps) {
 
     }, [lucid])
 
-    const mintLoadingView = (<div>(Waiting for a tx signature...)</div>)
-    const mintErrorView = (<div style={{color: 'red'}}>{mintError}</div>)
-    const mintSubmittedView = (<div>(Transaction submitted! Check your wallet. Refresh to mint another.)</div>)
+    const mintErrorView = (<div className='error-container'>{mintError}</div>)
 
     const defaultView = (
-        <div>
-            <p>Connected to {connectedWallet?.name || "(Unknown Wallet)"}</p>
-            <p>You have {isBwpLoading ? "(Loading...)" : Intl.NumberFormat().format(Number(bwp))} bwp</p>
-            <p>Your public key hash is: {isPkhLoading ? "(Loading...)" : pkh}</p>
+        <div className='tier-select-container'>
+            {/*<p>Connected to {connectedWallet?.name || "(Unknown Wallet)"}</p>*/}
+            <p className='bwp-display'>You have <span className='bwp-numbers'>{isBwpLoading ? "(Loading...)" : Intl.NumberFormat().format(Number(bwp))}</span> $BWP</p>
+            <p>public key hash: {isPkhLoading ? "(Loading...)" : pkh}</p>
+
+            {isMintLoading ? <p>Waiting for transaction signature...</p> : <span></span>}
+            {isMintSubmitted && !mintError ? <p>Successfully minted. Another?</p> : <span></span>}
+
             <div>
                 <h2>Tier 1</h2>
                 <button
+                    disabled={tierCosts[0] > bwp || isMintLoading}
+                    className="button-primary"
                     onClick={() => mintRFT(lucid, 1)}
                 >Burn {tierCosts[0].toString()} $BWP</button>
             </div>
             <div>
                 <h2>Tier 2</h2>
                 <button
+                    disabled={tierCosts[1] > bwp || isMintLoading}
+                    className="button-primary"
                     onClick={() => mintRFT(lucid, 2)}
                 >Burn {tierCosts[1].toString()} $BWP</button>
             </div>
             <div>
                 <h2>Tier 3</h2>
                 <button
+                    disabled={tierCosts[2] > bwp || isMintLoading}
+                    className="button-primary"
                     onClick={() => mintRFT(lucid, 3)}
-                >Burn ${tierCosts[2].toString()} $BWP</button>
+                >Burn {tierCosts[2].toString()} $BWP</button>
             </div>
         </div>
     )
 
     return (
         <div>
-            {mintError ? mintErrorView : <span></span>}
             <div>
+            {mintError ? mintErrorView : <span></span>}
             {
-                isMintSubmitted ? mintSubmittedView : 
-                    isMintLoading ? mintLoadingView : defaultView
+                defaultView
             }
             </div>
         </div>
