@@ -1,34 +1,54 @@
 import { useEffect, useState } from 'react'
 import { Lucid, UTxO } from 'lucid-cardano'
+import { WalletConnectedView } from './views/WalletConnectedView';
+import { setProtocolParameters } from './util/setProtocolParameters';
+import "./App.css"
 
-interface WalletOption {
+export interface WalletOption {
   name: string
   api: any
 }
-const BWP_ASSET_ID = "5dc56fd1ce4335f8be2020f3f836cd11022dfbbf462e198a93e9912662757368776966706c616e6573"
 
 function App() {
   const [availableWallets, setAvailableWallets] = useState<WalletOption[]>([]);
-  const [connectedWallet, setConnectedWallet] = useState<WalletOption | undefined>(undefined);
+  const [connectedWallet, setConnectedWallet] = useState<WalletOption | undefined>(undefined)
+  const [isWalletConnecting, setIsWalletConnecting] = useState<boolean>(false)
+  const [walletError, setWalletError] = useState<string | undefined>(undefined)
   const [lucid, setLucid] = useState<Lucid | undefined>(undefined)
-  const [bwp, setBwp] = useState<bigint>(0n)
+
 
   useEffect(() => {
     Lucid.new(undefined, "Mainnet")
-      .then(setLucid)
+      .then(lucid => {
+        setProtocolParameters(lucid)
+        setLucid(lucid)
+      })
   }, [])
 
   useEffect(() => {
+    if (!window.cardano) {
+      setWalletError("No Cardano wallet found in your browser.")
+      return
+    }
+    
     const wallets = Object.keys(window.cardano)
     .map(key => ({
       name: key,
       api: window.cardano[key],
     } as WalletOption))
     .filter(wallet => !["enable", "isEnabled"].includes(wallet.name));
-    setAvailableWallets(wallets);
-  }, []);
+
+    if (wallets.length === 0) {
+      setWalletError("No wallets found in this browser.")
+    } else {
+      setAvailableWallets(wallets)
+    }
+  }, [])
 
   const connectWallet = async (walletName: string) => {
+    setIsWalletConnecting(true)
+    setWalletError(undefined)
+
     try {
       const wallet = window.cardano[walletName];
       if (wallet) {
@@ -40,50 +60,58 @@ function App() {
 
         if (lucid) {
           lucid.selectWallet(enabledWalletAPI)
-          const utxos = await lucid.wallet.getUtxos()
-          const numBwp = utxos.reduce((acc: bigint, cur: UTxO) => {
-            const amount = cur.assets[BWP_ASSET_ID] ? cur.assets[BWP_ASSET_ID] : 0n
-            return acc + amount
-          }, 0n)
-
-          setBwp(numBwp)
-          console.log(numBwp)
         }
       }
-
     } catch (error) {
+      setWalletError("Failed to connect to requested wallet. Refresh and try again.")
       console.error(`Error connecting to ${walletName}`, error);
     }
+
+    setIsWalletConnecting(false)
   }
 
-  return (
+  const noWalletConnectedView = (
     <>
-      <div>bushwifplanes website</div>
+      {availableWallets.map(({ name }) => (
+        <div className={"button-container"} key={name}>
+          <button
+            className='button-primary'
+            onClick={() => connectWallet(name)}
+          >
+            Connect wif {name}
+          </button>
+        </div>
+      ))}
+    </>
+  )
 
+  const errorConnectingWalletView = (
+    <div className='error-container'>
+      {walletError}
+    </div>
+  )
 
+  const whileWalletConnectingView = (
+    <div>Waiting for wallet to connect...</div>
+  )
+
+  const walletConnectedView = lucid && connectedWallet ? <WalletConnectedView lucid={lucid!} connectedWallet={connectedWallet!}/> : <span></span>
+
+  const isWalletConnected = connectedWallet && connectedWallet.name
+
+  return (
+    <div className='app-container'>
+      <div className='title-heading'>bushwifplanes</div>
 
       <div>
-        {connectedWallet && connectedWallet.name ? (
-          <div>
-            <p>Connected to {connectedWallet.name}</p>
-            <p>You have {Intl.NumberFormat().format(Number(bwp))} bwp</p>
-          </div>
-        ) : (
-          <div>
-            {availableWallets.map(({ name }) => (
-              <button
-                key={name}
-                onClick={() => connectWallet(name)}
-              >
-                Connect to {name}
-              </button>
-            ))}
-          </div>
-        )}
-
-
+        { walletError ? errorConnectingWalletView : <span></span>}
+        { isWalletConnecting ? whileWalletConnectingView : (
+          isWalletConnected  ? 
+            walletConnectedView : noWalletConnectedView
+          )
+        }
       </div>
-    </>
+    </div>
   )
 }
 
