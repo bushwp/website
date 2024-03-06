@@ -19,10 +19,12 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const wallets = Object.keys(window.cardano).map(key => ({
+    const wallets = Object.keys(window.cardano)
+    .map(key => ({
       name: key,
       api: window.cardano[key],
-    } as WalletOption));
+    } as WalletOption))
+    .filter(wallet => !["enable", "isEnabled"].includes(wallet.name));
     setAvailableWallets(wallets);
   }, []);
 
