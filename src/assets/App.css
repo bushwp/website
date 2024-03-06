@@ -5,7 +5,7 @@ body {
     min-height: 100vh;
     flex-direction: row;
     font-family: Arial, Helvetica, sans-serif;
-    background-image: url("./assets/bwpmeme1.jpg");
+    background-image: url("./bwpmeme1.jpg");
     overflow: hidden;
 }
 
@@ -34,7 +34,7 @@ p {
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    background-image: url("./assets/bwpmeme2.png");
+    background-image: url("./bwpmeme2.png");
     background-size: cover;
     background-position: center center;
 }

@@ -63,7 +63,7 @@ function App() {
         }
       }
 
-      document.body.style.backgroundImage = 'url("./bwpmeme3.png")'
+      document.body.style.backgroundImage = 'url("./assets/bwpmeme3.png")'
 
     } catch (error) {
       setWalletError("Failed to connect to requested wallet. Refresh and try again.")
