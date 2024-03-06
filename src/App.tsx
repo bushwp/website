@@ -3,6 +3,7 @@ import { Lucid } from 'lucid-cardano'
 import { WalletConnectedView } from './views/WalletConnectedView';
 import { setProtocolParameters } from './util/setProtocolParameters';
 import "./App.css"
+import bwpmeme3url from "./assets/bwpmeme3.png"
 
 export interface WalletOption {
   name: string
@@ -63,7 +64,7 @@ function App() {
         }
       }
 
-      document.body.style.backgroundImage = 'url("./assets/bwpmeme3.png")'
+      document.body.style.backgroundImage = `url(${bwpmeme3url})`
 
     } catch (error) {
       setWalletError("Failed to connect to requested wallet. Refresh and try again.")
