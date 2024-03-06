@@ -13,6 +13,7 @@ export default defineConfig({
       promiseImportName: i => `__tla_${i}`
     })
   ],
+  base: '/website/',
   server: {
     watch: {
       usePolling: true
