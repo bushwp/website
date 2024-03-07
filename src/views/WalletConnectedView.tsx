@@ -12,7 +12,10 @@ export type WalletConnectedViewProps = {
 const BWP_POLICY = "5dc56fd1ce4335f8be2020f3f836cd11022dfbbf462e198a93e99126"
 const BWP_ASSET_NAME = fromText("bushwifplanes")
 const BWP_ASSET_ID = `${BWP_POLICY}${BWP_ASSET_NAME}`
-const admins = ["ad1b43b5f71f8acbd70fe0cbdfeb39a3257cf9f0a649a3b068959832"]
+const admins = [
+    "ad1b43b5f71f8acbd70fe0cbdfeb39a3257cf9f0a649a3b068959832",
+    "7c5154c1ffb22090f42474153cb35d94f9b5169f2a6829589dd6d18d"
+]
 const tierCosts = [2n, 3n, 4n]
 const RFTMintingPolicy = new BwpExchangeMint(BWP_POLICY, BWP_ASSET_NAME, admins, tierCosts)
 

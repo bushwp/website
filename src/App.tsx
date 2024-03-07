@@ -37,7 +37,7 @@ function App() {
         name: key,
         api: window.cardano[key],
       } as WalletOption))
-      .filter(wallet => ["eternl", "nami", "flint", "typhon", "yoroi", "lace"].includes(wallet.name.toLowerCase()));
+      .filter(wallet => ["eternl", "nami", "flint", "typhon", "yoroi", "lace", "vespr"].includes(wallet.name.toLowerCase()));
 
     if (wallets.length === 0) {
       setWalletError("No wallets found in this browser.")
