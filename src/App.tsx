@@ -33,11 +33,11 @@ function App() {
     }
     
     const wallets = Object.keys(window.cardano)
-    .map(key => ({
-      name: key,
-      api: window.cardano[key],
-    } as WalletOption))
-    .filter(wallet => !["enable", "isEnabled"].includes(wallet.name));
+      .map(key => ({
+        name: key,
+        api: window.cardano[key],
+      } as WalletOption))
+      .filter(wallet => ["eternl", "nami", "flint", "typhon", "yoroi", "lace"].includes(wallet.name.toLowerCase()));
 
     if (wallets.length === 0) {
       setWalletError("No wallets found in this browser.")

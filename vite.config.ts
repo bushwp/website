@@ -25,9 +25,4 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucid-cardano']
   },
-  resolve: {
-    alias: {
-      'lucid-cardano': './node_modules/lucid-cardano/web/mod.js'
-    }
-  }
 })
