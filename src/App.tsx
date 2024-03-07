@@ -105,7 +105,7 @@ function App() {
 
   return (
     <div className={isWalletConnected ? 'app-container-logged-in' : 'app-container'}>
-      <div className='title-heading fire burn'>bushwifplanes</div>
+      <div className={`title-heading ${isWalletConnected ? '' : 'burn fire'} `}>bushwifplanes</div>
 
       <div>
         { walletError ? errorConnectingWalletView : <span></span>}
